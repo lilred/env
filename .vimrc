@@ -1,9 +1,9 @@
 set nocompatible                        " put the Improved in Vi Improved
 
-
 if(!empty(glob("~/.vim/bundle/Vundle.vim")))
 	set runtimepath+=~/.vim/bundle/Vundle.vim " 
 	call vundle#begin()                     " 
+	Plugin 'tpope/vim-sensible'             " 'a universal set of defaults that (hopefully) everyone can agree on'
 	Plugin 'bling/vim-bufferline'           " show open buffers in command bar
 	Plugin 'flazz/vim-colorschemes'         " syntax highlighting color pack
 	Plugin 'fsharp/vim-fsharp'              " F# support
@@ -17,12 +17,17 @@ if(!empty(glob("~/.vim/bundle/Vundle.vim")))
 	Plugin 'vim-airline/vim-airline-themes' " status line themes
 	Plugin 'vim-syntastic/syntastic'        " error highlighting
 	Plugin 'VundleVim/Vundle.vim'           " to prevent PluginClean from wiping out Vundle
-	Plugin 'tpope/vim-sensible'             " 'a universal set of defaults that (hopefully) everyone can agree on'
 	call vundle#end()                       " 
+	filetype off                            " toggle filetype support to refresh supported file types
+	filetype on                             " 
+else
 endif
 
-filetype off                            " toggle filetype support to refresh supported file types
-filetype plugin indent on               " 
+" Degrade gracefully
+if(empty(glob("~/.vim/bundle/vim-sensible")))
+	! git clone https://github.com/tpope/vim-sensible.git $HOME/.vim/bundle/vim-sensible
+endif
+set runtimepath+=~/.vim/bundle/vim-sensible
 
 let mapleader=","
 
