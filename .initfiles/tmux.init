@@ -1,10 +1,17 @@
 #!/bin/bash
 
 if
-	[ "$(command -v tmux)" ] && # tmux is installed
-	[ -z "$TMUX" ]           && # not inside tmux
-	[ "$TERM" != 'screen' ]  ;  # not inside screen
+	[ -z "$(command -v tmux)" ] || # tmux is not installed
+	[ -n "$TMUX" ]           || # already inside tmux
+	[ "$TERM" == 'screen' ]  ;  # inside screen
 then
-	tmux attach ||                  # attach to a session if it exists
-	exec tmux new-session && exit;  # otherwise, start a new one
+	return;
 fi
+
+TPM_FOLDER="$HOME/.tmux/plugins/tpm"
+if [ ! -d "$TPM_FOLDER" ] ; then
+	git clone 'https://github.com/tmux-plugins/tpm' "$TPM_FOLDER"
+fi
+
+tmux attach ||                  # attach to a session if it exists
+exec tmux new-session && exit;  # otherwise, start a new one
