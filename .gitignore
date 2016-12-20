@@ -20,6 +20,9 @@
 !.ssh
 !.ssh/authorized_keys
 
+!.stack
+!.stack/config.yaml
+
 !.vim
-!.vim/ftplugin
-!.vim/ftplugin/**
+!.vim/after
+!.vim/after/**
