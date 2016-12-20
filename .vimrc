@@ -100,16 +100,3 @@ else
 	let &t_SI = "\<Esc>]50;CursorShape=1\x7"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
-
-augroup configgroup
-	autocmd!
-	" languages with off-side rule
-	autocmd FileType fsharp     setlocal expandtab
-	autocmd FileType haskell    setlocal expandtab
-	autocmd FileType haskell    setlocal tabstop=8
-	autocmd FileType make       setlocal noexpandtab
-	autocmd FileType python     setlocal expandtab      " PEP8
-	autocmd FileType python     setlocal tabstop=4      " PEP8
-	autocmd FileType python     setlocal softtabstop=4  " PEP8
-	autocmd FileType python     setlocal shiftwidth=4   " PEP8
-augroup END
