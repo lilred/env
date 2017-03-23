@@ -17,7 +17,7 @@ if [ -n "$(command -v tmux)" ] ; then # tmux is installed
 		git clone 'https://github.com/tmux-plugins/tpm' "$TPM_FOLDER"
 		"$TPM_FOLDER/bin/install_plugins"
 	else
-		"$TPM_FOLDER/bin/update_plugins" "all"
+		: #$TPM_FOLDER/bin/update_plugins" "all"
 	fi
 fi
 
