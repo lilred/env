@@ -8,7 +8,7 @@ Plugin 'flazz/vim-colorschemes'         " syntax highlighting color pack
 Plugin 'scrooloose/nerdtree'            " file system explorer
 Plugin 'sjl/gundo.vim'                  " 'super undo'
 Plugin 'tpope/vim-fugitive'             " git integration
-Plugin 'valloric/YouCompleteMe'         " autocomplete XXX slows down startup
+" Plugin 'valloric/YouCompleteMe'         " autocomplete XXX slows down startup
 Plugin 'vim-airline/vim-airline'        " status line
 Plugin 'vim-airline/vim-airline-themes' " status line themes
 Plugin 'vim-syntastic/syntastic'        " error highlighting
