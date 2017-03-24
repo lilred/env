@@ -8,13 +8,133 @@ case $- in
       *) return;;
 esac
 
+# prompt
+
+build_ps1() {
+	local exit_code="$?"
+
+	join_by() {
+		local IFS="$1"
+		shift
+		echo "$*"
+	}
+
+	format_text() {
+		ESC="\e"
+		STR=$1
+		shift
+		if [ -z "$*" ] ; then # emphasis
+			BEGIN=""
+			END=""
+		else
+			END="$ESC[0m"
+			codes=$(join_by ";" $*)
+			BEGIN="$ESC[${codes}m"
+		fi
+		echo -e "$BEGIN$STR$END"
+	}
+
+	local BOLD=1
+	local FAINT=2
+	local ITALIC=3
+	local UNDERLINE=4
+	local BLINK=5
+	local BLINK_FAST=6
+	local STRIKETHROUGH=9
+
+	local FG_BLACK=30
+	local FG_RED=31
+	local FG_GREEN=32
+	local FG_YELLOW=33
+	local FG_BLUE=34
+	local FG_MAGENTA=35
+	local FG_CYAN=36
+	local FG_WHITE=37
+
+	local BG_BLACK=40
+	local BG_RED=41
+	local BG_GREEN=42
+	local BG_YELLOW=43
+	local BG_BLUE=44
+	local BG_MAGENTA=45
+	local BG_CYAN=46
+	local BG_WHITE=47
+
+	local USERNAME="\u"
+	local DIRECTORY="\w"
+	local HOSTNAME_SHORT="\h"
+	local HOSTNAME_LONG="\H"
+	local SIGIL="\\$"
+
+	local DATE="\d"
+	local TIME_SHORT="\A"
+	local TIME_LONG="\@"
+	local TIME_SHORT_SECONDS="\t"
+	local TIME_LONG_SECONDS="\T"
+
+	represent_exit_code() {
+		if [ "$exit_code" == "0" ] ; then
+			echo "$(format_text "$1" "$FG_GREEN")"
+		else
+			echo "$(format_text "$2" "$FG_RED")"
+		fi
+	}
+	
+	parse_git_branch() {
+		git_root="$(git rev-parse --show-toplevel)"
+		if [ "$git_root" != "$HOME" ] ; then
+			git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+		fi
+	}
+
+	local symbols=()
+
+	# edit below
+	# For dynamic symbols (git branch, exit code, etc.) you must turn assign PROMPT_COMMAND="build_ps1"
+	# (Disabled by default since it causes lag)
+
+	#symbols+=("$(represent_exit_code "☺" "☹") ")
+
+	# Comment out to hide username
+	SHOW_USERNAME="Y"
+	if [ "$SHOW_USERNAME" == "Y" ] ; then
+		symbols+=("$(format_text "$USERNAME" "$BOLD" "$FG_GREEN")")
+	fi
+
+	# Comment out to hide hostname unless you're in an SSH session
+	SHOW_HOSTNAME="Y"
+	if [ -n "$SSH_TTY" ] || [ "$SHOW_HOSTNAME" == "Y" ] ; then
+		symbols+=("$(format_text "@$HOSTNAME_SHORT" "$BOLD" "$FG_GREEN"):")
+	fi
+
+	symbols+=("$(format_text "$DIRECTORY" "$BOLD" "$FG_BLUE")")
+
+	#local git_branch="$(parse_git_branch)"
+	if [ -n "$git_branch" ] ; then
+		symbols+=(" $(format_text "($git_branch)" "$BOLD" "$FG_CYAN")")
+	fi
+
+	if [ "$UID" -eq "0" ] ; then
+		symbols+=("$(format_text "$SIGIL" "$BOLD" "$FG_RED")")
+	else
+		symbols+=("$(format_text "$SIGIL" "$BOLD" "$FG_YELLOW")")
+	fi
+
+	PS1="$(join_by "" "${symbols[@]}") "
+}
+
 # if this is an SSH session, set title of shell to hostname
-if 
+if
 	[ -n "$SSH_CLIENT" ] &&
 	[ -z "$TMUX"       ] ;
 then
 	# set title
 	printf "\033k$USER@$HOSTNAME\033\\"
+fi
+
+# if display isn't set, enable it
+if [ -n "$DISPLAY" ] ; then
+	DISPLAY=:0
 fi
 
 # start tmux
@@ -25,6 +145,12 @@ if
 then
 	tmux attach 2> /dev/null ||     # attach to a session if it exists
 	exec tmux new-session && exit;  # otherwise, start a new one
+fi
+
+# if running in WSL, set up environment
+WINHOME="/mnt/c/Users/$USER"
+if [ -d $WINHOME ] ; then
+	export WINHOME
 fi
 
 # default to Vim
@@ -85,7 +211,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	#PROMPT_COMMAND="build_ps1"
+	build_ps1
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
