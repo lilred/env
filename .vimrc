@@ -20,6 +20,16 @@ if(executable("fsharpc") || executable("fsc"))
 	Plugin 'fsharp/vim-fsharp'
 endif
 
+if(executable("coqtop"))
+	if(has("python"))
+		Plugin 'let-def/vimbufsync'
+		Plugin 'the-lambda-church/coquille'
+	elseif(has("python3"))
+		Plugin 'lilred/vimbufsync'
+		Plugin 'lilred/coquille'
+	endif
+endif
+
 if(executable("rustc"))
 	Plugin 'rust-lang/rust.vim'
 	if(executable("racer"))
@@ -59,7 +69,7 @@ let &softtabstop = tabwidth             "
 
 set hlsearch                            " highlight matches
 " stop highlighting matches
-nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <leader><space> :noh<CR>
 
 set foldenable                          " enable code folding
 set foldlevelstart=10                   " only fold highly nested code by default
