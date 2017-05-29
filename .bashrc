@@ -143,8 +143,14 @@ if
 	[ -z "$TMUX" ]              && # not inside tmux
 	[ "$TERM" != 'screen' ]     ;  # not inside screen
 then
-	tmux attach 2> /dev/null ||     # attach to a session if it exists
-	exec tmux new-session && exit;  # otherwise, start a new one
+	TMUX_SESSION_ID=$(tmux ls | grep attached --invert-match | cut -d ":" -f1)
+	if [ -n "$TMUX_SESSION_ID" ] ; then
+		tmux attach -t "$TMUX_SESSION_ID"
+	else
+		exec tmux new-session && exit
+	fi
+	#tmux attach 2> /dev/null ||     # attach to a session if it exists
+	#exec tmux new-session && exit;  # otherwise, start a new one
 fi
 
 # if running in WSL, set up environment
