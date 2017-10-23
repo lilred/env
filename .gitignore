@@ -4,6 +4,7 @@
 
 !.bashrc
 !.profile
+!.bash_profile
 !.sudo_as_admin_successful
 !.tmux.conf
 !.vimrc
@@ -17,6 +18,7 @@
 !.initfiles
 !.initfiles/**
 
+# XXX this is inappropriate for work machines
 !.ssh
 !.ssh/authorized_keys
 
