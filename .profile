@@ -7,11 +7,11 @@
 # the default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 # Note: Bash on Windows does not currently apply umask properly.
-if [ "$(umask)" = "0000" ]; then
+if [ `umask` = "0000" ]; then
 	umask 022
 fi
 
-if [ -n "$(command -v tmux)" ] ; then # tmux is installed
+if [ -n `command -v tmux` ] ; then # tmux is installed
 	TPM_FOLDER="$HOME/.tmux/plugins/tpm"
 	if [ ! -d "$TPM_FOLDER" ] ; then
 		git clone 'https://github.com/tmux-plugins/tpm' "$TPM_FOLDER"
@@ -24,7 +24,7 @@ if [ -n "$(command -v tmux)" ] ; then # tmux is installed
 	fi
 fi
 
-if [ -n "$(command -v vim)" ] ; then # vim is installed
+if [ -n `command -v vim` ] ; then # vim is installed
 	VUNDLE_DIR="$HOME/.vim/bundle/Vundle.vim";
 	if [ ! -d "$VUNDLE_DIR" ] ; then
 		git clone https://github.com/VundleVim/Vundle.vim.git $VUNDLE_DIR;
