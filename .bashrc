@@ -9,7 +9,6 @@ case $- in
 esac
 
 # prompt
-
 build_ps1() {
 	local exit_code="$?"
 
@@ -143,9 +142,9 @@ if
 	[ -z "$TMUX" ]              && # not inside tmux
 	[ "$TERM" != 'screen' ]     ;  # not inside screen
 then
-	TMUX_SESSION_ID=$(tmux ls | grep attached --invert-match | cut -d ":" -f1)
-	if [ -n "$TMUX_SESSION_ID" ] ; then
-		tmux attach -t "$TMUX_SESSION_ID" && exit
+	TMUX_SESSION_IDS=$(tmux ls | grep attached --invert-match | cut -d ":" -f1)
+	if [ -n "$TMUX_SESSION_IDS" ] ; then
+		tmux attach -t "$(head -n 1 $TMUX_SESSION_IDS)" && exit
 	else
 		exec tmux new-session && exit
 	fi
@@ -217,9 +216,9 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-	#PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	#PROMPT_COMMAND="build_ps1"
-	build_ps1
+	#build_ps1
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -277,3 +276,14 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+if [ -n "$(command -v rbenv)" ]; then
+	eval "$(rbenv init -)"
+fi
+
+[ -r "/Users/cppoulin/anaconda/bin" ]      && export PATH="/Users/cppoulin/anaconda/bin:$PATH"
+[ -r "/usr/local/opt/python/libexec/bin" ] && export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+
+[ -r "$HOME/.nvm" ]                 && export NVM_DIR="$HOME/.nvm"
+[ -r "$NVM_DIR/nvm.sh" ]          && source "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -r "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
