@@ -8,12 +8,6 @@
 !.tmux.conf
 !.vimrc
 
-!.aws
-!.aws/config
-
-!.initfiles
-!.initfiles/**
-
 !.stack
 !.stack/config.yaml
 
