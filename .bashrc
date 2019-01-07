@@ -14,7 +14,7 @@ if
 	[ -z "$TMUX"       ] ;
 then
 	# set title
-	printf "\033k$USER@$HOSTNAME\033\\"
+	: #printf "\033k$USER@$HOSTNAME\033\\"
 fi
 
 # if display isn't set, enable it
@@ -28,14 +28,12 @@ if
 	[ -z "$TMUX" ]              && # not inside tmux
 	[ "$TERM" != 'screen' ]     ;  # not inside screen
 then
-	TMUX_SESSION_IDS=$(tmux ls | grep attached --invert-match | cut -d ":" -f1)
+	TMUX_SESSION_IDS=$(tmux ls 2> /dev/null | grep attached --invert-match | cut -d ":" -f1)
 	if [ -n "$TMUX_SESSION_IDS" ] ; then
-		tmux attach -t "$(echo $TMUX_SESSION_IDS | head -n 1)" && exit
+		tmux attach -t "$(echo "$TMUX_SESSION_IDS" | head -n 1)" && exit
 	else
 		exec tmux new-session && exit
 	fi
-	#tmux attach 2> /dev/null ||     # attach to a session if it exists
-	#exec tmux new-session && exit;  # otherwise, start a new one
 fi
 
 # if running in WSL, set up environment
@@ -102,7 +100,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-	PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+	PS1='[\t] ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 	#PROMPT_COMMAND="build_ps1"
 	#build_ps1
 else

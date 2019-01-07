@@ -43,12 +43,14 @@ export PATH
 [ -r "$HOME/bin" ]                         && PATH="$HOME/bin:$PATH"
 [ -r "$HOME/.local/bin" ]                  && PATH="$HOME/.local/bin:$PATH"
 [ -r "$HOME/.cargo/bin" ]                  && PATH="$HOME/.cargo/bin:$PATH"
-[ -r "$HOME/anaconda/bin" ]                && PATH="$HOME/anaconda/bin:$PATH"
+[ -r "$HOME/miniconda3/bin" ]                && PATH="$HOME/miniconda3/bin:$PATH"
 [ -r "/usr/local/opt/python/libexec/bin" ] && PATH="/usr/local/opt/python/libexec/bin:$PATH"
 
 [ -r "$HOME/.nvm" ]               && export NVM_DIR="$HOME/.nvm"
 [ -r "$NVM_DIR/nvm.sh" ]          && source "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -r "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export ANSIBLE_STDOUT_CALLBACK="debug"
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then

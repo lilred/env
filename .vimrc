@@ -58,7 +58,7 @@ set background=dark                     "
 silent! colorscheme badwolf             " 
 
 set number                              " show line numbers
-set colorcolumn=81                      " ruler
+set colorcolumn=80                      " ruler
 set list                                " show whitespace
 set showmatch                           " highlight matching parentheses
 
